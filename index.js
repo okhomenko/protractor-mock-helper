@@ -26,37 +26,6 @@ function passThrough($httpBackend) {
   });
 }
 
-function injectAngularMocks() {
-
-  browser.executeAsyncScript(function () {
-
-    var callback = arguments[arguments.length - 1];
-
-    //Script loading function
-    function loadScript(url) {
-
-      var script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = url;
-      script.async = false;
-      script.defer = false;
-
-      document.getElementsByTagName('head')[0].appendChild(script);
-
-    }
-
-    var urls = ["//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-mocks.js"];
-
-    urls.map(loadScript);
-
-    setTimeout(function () {
-      callback();
-    }, 2000);
-
-  });
-
-}
-
 function build(funcs) {
   var headStr, headDefineStr,
     bodyStr, optionsStr, footStr;
@@ -135,7 +104,6 @@ function wrapData(func, data) {
 }
 
 module.exports = {
-  injectAngularMocks: injectAngularMocks,
   build: build,
   verifyNoOutstandingExpectation: verifyNoOutstandingExpectation,
   verifyNoOutstandingRequest: verifyNoOutstandingRequest,
