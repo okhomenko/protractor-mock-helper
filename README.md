@@ -15,7 +15,13 @@ npm install --save-dev protractor-mock-helper
 
 ```javascript
 
+var mocks = require('protractor-mock-helper');
+
 describe('Example Test Suite', function () {
+
+  beforeEach(function () {
+    mocks.injectAngularMocks();
+  });
 
   it('should test', function () {
     browser.addMockModule('httpBackEndMock', mocks.build([

@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require('underscore');
-
 function options204($httpBackend) {
   $httpBackend.when('OPTIONS', /\/api\//)
     .respond(function () {
@@ -26,6 +24,37 @@ function passThrough($httpBackend) {
   methods.forEach(function (method) {
     $httpBackend['when' + method](url).passThrough();
   });
+}
+
+function injectAngularMocks() {
+
+  browser.executeAsyncScript(function () {
+
+    var callback = arguments[arguments.length - 1];
+
+    //Script loading function
+    function loadScript(url) {
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+      script.async = false;
+      script.defer = false;
+
+      document.getElementsByTagName('head')[0].appendChild(script);
+
+    }
+
+    var urls = ["//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-mocks.js"];
+
+    urls.map(loadScript);
+
+    setTimeout(function () {
+      callback();
+    }, 2000);
+
+  });
+
 }
 
 function build(funcs) {
@@ -93,7 +122,8 @@ function wrapData(func, data) {
 
   body = '';
 
-  _.each(data, function (value, key) {
+  Object.keys(data).forEach(function (key) {
+    var value = data[key];
     body += 'var ' + key + ' = ' + JSON.stringify(data[key]) + ';\n';
   });
 
@@ -105,6 +135,7 @@ function wrapData(func, data) {
 }
 
 module.exports = {
+  injectAngularMocks: injectAngularMocks,
   build: build,
   verifyNoOutstandingExpectation: verifyNoOutstandingExpectation,
   verifyNoOutstandingRequest: verifyNoOutstandingRequest,
