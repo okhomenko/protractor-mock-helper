@@ -2,6 +2,14 @@
 
 Another protractor http backend mock helper. It uses similar aproach to http-backend-proxy and protractor-http-mock.
 
+## Install
+
+```bash
+
+npm install --save-dev protractor-mock-helper
+
+```
+
 
 ## Usage
 
